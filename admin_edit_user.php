@@ -1,6 +1,6 @@
 <?php
-include 'includes/config.php';
-include 'includes/auth.php';
+include_once 'includes/config.php';
+include_once 'includes/auth.php';
 requireAdmin();
 
 if (!isset($_GET["id"]) || empty(trim($_GET["id"]))) {
@@ -25,6 +25,9 @@ if ($stmt = $conn->prepare($sql)) {
         exit;
     }
     $stmt->close();
+} else {
+    header("location: admin_users.php");
+    exit;
 }
 
 $username = $user["username"];
@@ -39,9 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $new_username = trim($_POST["username"]);
         if ($new_username != $username) {
-            $sql = "SELECT id FROM users WHERE username = ?";
+            $sql = "SELECT id FROM users WHERE username = ? AND id != ?";
             if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("s", $new_username);
+                $stmt->bind_param("si", $new_username, $user_id);
                 $stmt->execute();
                 $stmt->store_result();
                 if ($stmt->num_rows == 1) {
@@ -59,9 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $new_email = trim($_POST["email"]);
         if ($new_email != $email) {
-            $sql = "SELECT id FROM users WHERE email = ?";
+            $sql = "SELECT id FROM users WHERE email = ? AND id != ?";
             if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("s", $new_email);
+                $stmt->bind_param("si", $new_email, $user_id);
                 $stmt->execute();
                 $stmt->store_result();
                 if ($stmt->num_rows == 1) {
@@ -94,24 +97,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include_once 'includes/header.php'; ?>
     <h2>Uredi uporabnika</h2>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?id=<?php echo $user_id; ?>" method="post">
-        <div>
+        <div class="form-group">
             <label>Uporabniško ime *:</label>
-            <input type="text" name="username" value="<?php echo $username; ?>">
-            <span><?php echo $username_err; ?></span>
+            <input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
+            <span class="error"><?php echo $username_err; ?></span>
         </div>
-        <div>
+        <div class="form-group">
             <label>Email *:</label>
-            <input type="email" name="email" value="<?php echo $email; ?>">
-            <span><?php echo $email_err; ?></span>
+            <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
+            <span class="error"><?php echo $email_err; ?></span>
         </div>
-        <div>
+        <div class="form-group">
             <label>Polno ime:</label>
-            <input type="text" name="full_name" value="<?php echo $full_name; ?>">
+            <input type="text" name="full_name" value="<?php echo htmlspecialchars($full_name); ?>">
         </div>
-        <div>
+        <div class="form-group">
             <label>Vloga *:</label>
             <select name="role">
                 <option value="user" <?php echo $role == "user" ? "selected" : ""; ?>>Uporabnik</option>
@@ -119,10 +122,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="admin" <?php echo $role == "admin" ? "selected" : ""; ?>>Administrator</option>
             </select>
         </div>
-        <div>
-            <input type="submit" value="Shrani spremembe">
-            <a href="admin_users.php">Prekliči</a>
+        <div class="form-group">
+            <input type="submit" value="Shrani spremembe" class="button">
+            <a href="admin_users.php" class="button button-secondary">Prekliči</a>
         </div>
         <p>* Obvezno polje</p>
     </form>
-<?php include 'includes/footer.php'; ?>
+<?php include_once 'includes/footer.php'; ?>
