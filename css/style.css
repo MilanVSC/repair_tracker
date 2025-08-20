@@ -5,40 +5,54 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
+    background-color: #f8f9fa;
 }
 
 header {
-    background: #333;
+    background: #343a40;
     color: #fff;
     padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header h1 {
     margin: 0;
+    font-size: 1.8rem;
+}
+
+nav {
+    margin-top: 0.5rem;
 }
 
 nav a {
     color: #fff;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
     text-decoration: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    transition: background-color 0.3s;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    background-color: #495057;
+    text-decoration: none;
 }
 
 main {
-    padding: 1rem;
-    max-width: 1200px;
+    padding: 2rem;
+    max-width: 1400px;
     margin: 0 auto;
+    background: #fff;
+    min-height: calc(100vh - 200px);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 footer {
-    background: #333;
+    background: #343a40;
     color: #fff;
     text-align: center;
     padding: 1rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 /* Tabele */
@@ -46,23 +60,31 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 table, th, td {
-    border: 1px solid #ddd;
+    border: 1px solid #dee2e6;
 }
 
 th, td {
-    padding: 0.5rem;
+    padding: 0.75rem;
     text-align: left;
 }
 
 th {
-    background-color: #f4f4f4;
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #495057;
 }
 
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #e9ecef;
 }
 
 /* Forme */
@@ -73,6 +95,8 @@ form div {
 label {
     display: block;
     margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #495057;
 }
 
 input[type="text"],
@@ -82,43 +106,170 @@ input[type="date"],
 textarea,
 select {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
 }
 
 textarea {
     min-height: 100px;
+    resize: vertical;
 }
 
 input[type="submit"] {
-    background: #333;
+    background: #007bff;
     color: #fff;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
 }
 
 input[type="submit"]:hover {
-    background: #555;
+    background: #0056b3;
 }
 
 /* Napake */
-span {
-    color: red;
+span.error {
+    color: #dc3545;
     font-size: 0.9rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Statusi */
+.status-reported { color: #ffc107; font-weight: bold; }
+.status-in_progress { color: #17a2b8; font-weight: bold; }
+.status-completed { color: #28a745; font-weight: bold; }
+.status-cancelled { color: #dc3545; font-weight: bold; }
+
+/* Prioritele */
+.priority-low { color: #6c757d; }
+.priority-medium { color: #17a2b8; }
+.priority-high { color: #ffc107; font-weight: bold; }
+.priority-critical {
+    color: #dc3545;
+    font-weight: bold;
+    background-color: #fff3f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Gumbe */
+.button {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.button:hover {
+    background: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.button-secondary {
+    background: #6c757d;
+}
+
+.button-secondary:hover {
+    background: #545b62;
 }
 
 /* Komentarji */
-.comment {
-    border-bottom: 1px solid #eee;
-    padding: 1rem 0;
-    margin-bottom: 1rem;
+.comments-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
 }
 
-.comment p {
-    margin: 0.5rem 0;
+.comment {
+    background: #fff;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    object-fit: cover;
+}
+
+.comment-avatar-default {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    background: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.comment-info {
+    flex: 1;
+}
+
+.comment-info strong {
+    color: #495057;
+}
+
+.comment-info span {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.comment-date {
+    color: #6c757d;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.comment-content {
+    color: #495057;
+    line-height: 1.5;
 }
 
 /* Galerija slik */
@@ -130,30 +281,146 @@ span {
 }
 
 .image-item {
-    border: 1px solid #ddd;
-    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #fff;
     text-align: center;
+    transition: transform 0.3s;
+}
+
+.image-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .image-item img {
     max-width: 100%;
-    height: auto;
-    border-radius: 4px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
 }
 
-/* Sporočila */
+.image-item img:hover {
+    opacity: 0.8;
+}
+
+.image-item p {
+    margin: 0.5rem 0 0 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Modal za slike */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    padding-top: 60px;
+}
+
+.modal-content {
+    display: block;
+    margin: 0 auto;
+    max-width: 90%;
+    max-height: 80%;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ccc;
+}
+
+/* Repair details */
+.repair-details {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #dee2e6;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #dee2e6;
+}
+
+.description {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+}
+
+/* Success/error messages */
 .success {
     background: #d4edda;
     color: #155724;
-    padding: 0.75rem;
-    border-radius: 4px;
+    padding: 1rem;
+    border-radius: 0.25rem;
     margin: 1rem 0;
+    border: 1px solid #c3e6cb;
 }
 
 .error {
     background: #f8d7da;
     color: #721c24;
-    padding: 0.75rem;
-    border-radius: 4px;
+    padding: 1rem;
+    border-radius: 0.25rem;
     margin: 1rem 0;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav a {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .image-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    main {
+        padding: 1rem;
+    }
 }
