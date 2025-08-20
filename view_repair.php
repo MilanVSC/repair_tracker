@@ -63,6 +63,10 @@ if ($stmt = $conn->prepare($sql)) {
     $images = $result->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 }
+
+// Preveri ali je tehnik in ali je popravilo že dodeljeno
+$can_take_repair = isTechnician() && empty($repair["assigned_to"]) && $repair["status"] != "completed" && $repair["status"] != "cancelled";
+$is_assigned_technician = isTechnician() && $repair["assigned_to"] == $_SESSION["user_id"];
 ?>
 
 <?php include_once 'includes/header.php'; ?>
@@ -74,6 +78,13 @@ if ($stmt = $conn->prepare($sql)) {
             <a href="admin_edit_repair.php?id=<?php echo $repair["id"]; ?>" class="button">Uredi popravilo</a>
         <?php endif; ?>
         <a href="add_repair_images.php?id=<?php echo $repair["id"]; ?>" class="button">Dodaj slike</a>
+
+        <?php if ($can_take_repair): ?>
+            <form action="take_repair.php" method="post" style="display: inline;">
+                <input type="hidden" name="repair_id" value="<?php echo $repair["id"]; ?>">
+                <button type="submit" class="button" style="background: #28a745;">Prevzemi popravilo</button>
+            </form>
+        <?php endif; ?>
     </div>
 
     <div class="repair-details">
@@ -118,6 +129,10 @@ if ($stmt = $conn->prepare($sql)) {
                 <div class="detail-item">
                     <strong>Dodeljeno:</strong> <?php echo htmlspecialchars($repair["assigned_to_name"]); ?>
                 </div>
+            <?php else: ?>
+                <div class="detail-item">
+                    <strong>Dodeljeno:</strong> <span style="color: #dc3545;">Brez dodelitve</span>
+                </div>
             <?php endif; ?>
             <div class="detail-item">
                 <strong>Datum prijave:</strong> <?php echo date('d.m.Y H:i', strtotime($repair["reported_date"])); ?>
@@ -157,7 +172,7 @@ if ($stmt = $conn->prepare($sql)) {
         <a href="add_repair_images.php?id=<?php echo $repair['id']; ?>" class="button">Dodaj slike</a>
     </div>
 
-<?php if (isAdmin() || isTechnician() || $repair["reported_by"] == $_SESSION["user_id"]): ?>
+<?php if (isAdmin() || $is_assigned_technician || $repair["reported_by"] == $_SESSION["user_id"]): ?>
     <div class="repair-actions">
         <h3>Upravljanje popravila</h3>
         <form action="update_status.php" method="post">

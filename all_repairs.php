@@ -24,6 +24,14 @@ if ($result->num_rows > 0) {
         <a href="dashboard.php" class="button">Nazaj na nadzorno ploščo</a>
     </div>
 
+<?php if (isset($_GET['success'])): ?>
+    <div class="success"><?php echo htmlspecialchars($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php if (isset($_GET['error'])): ?>
+    <div class="error"><?php echo htmlspecialchars($_GET['error']); ?></div>
+<?php endif; ?>
+
     <table>
         <thead>
         <tr>
@@ -77,6 +85,12 @@ if ($result->num_rows > 0) {
                     <a href="view_repair.php?id=<?php echo $repair["id"]; ?>">Ogled</a>
                     <?php if (isAdmin() || $repair["reported_by"] == $_SESSION["user_id"]): ?>
                         <a href="admin_edit_repair.php?id=<?php echo $repair["id"]; ?>">Uredi</a>
+                    <?php endif; ?>
+                    <?php if (isTechnician() && empty($repair["assigned_to"]) && $repair["status"] != "completed" && $repair["status"] != "cancelled"): ?>
+                        <form action="take_repair.php" method="post" style="display: inline;">
+                            <input type="hidden" name="repair_id" value="<?php echo $repair["id"]; ?>">
+                            <button type="submit" style="background: none; border: none; color: #28a745; cursor: pointer; text-decoration: underline;">Prevzemi</button>
+                        </form>
                     <?php endif; ?>
                 </td>
             </tr>

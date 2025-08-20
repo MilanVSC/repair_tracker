@@ -10,24 +10,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["repair_id"])) {
     $assigned_to = isset($_POST["assigned_to"]) ? trim($_POST["assigned_to"]) : NULL;
 
     // Preveri pravice
-    $sql = "SELECT status, assigned_to FROM repairs WHERE id = ?";
+    $sql = "SELECT status, assigned_to, reported_by FROM repairs WHERE id = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("i", $repair_id);
         $stmt->execute();
         $stmt->store_result();
-        
+
         if ($stmt->num_rows == 1) {
-            $stmt->bind_result($current_status, $current_assigned);
+            $stmt->bind_result($current_status, $current_assigned, $reported_by);
             $stmt->fetch();
-            
+
             // Preveri, če ima uporabnik pravice za spremembo statusa
             $can_update = false;
             if (isAdmin()) {
                 $can_update = true;
             } elseif (isTechnician() && ($current_assigned == $_SESSION["user_id"] || $new_status == "reported")) {
                 $can_update = true;
+            } elseif ($reported_by == $_SESSION["user_id"] && ($new_status == "cancelled" || $current_status == "reported")) {
+                $can_update = true;
             }
-            
+
             if ($can_update) {
                 // Posodobi status popravila
                 $update_sql = "UPDATE repairs SET status = ?, assigned_to = ?";
@@ -37,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["repair_id"])) {
                     $update_sql .= ", completed_date = NULL";
                 }
                 $update_sql .= " WHERE id = ?";
-                
+
                 if ($update_stmt = $conn->prepare($update_sql)) {
                     $update_stmt->bind_param("sii", $new_status, $assigned_to, $repair_id);
                     $update_stmt->execute();
                     $update_stmt->close();
-                    
+
                     // Dodaj v zgodovino statusov
                     $history_sql = "INSERT INTO status_history (repair_id, old_status, new_status, changed_by, notes) 
                                     VALUES (?, ?, ?, ?, ?)";

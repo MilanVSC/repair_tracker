@@ -16,7 +16,7 @@ function isAdmin() {
 
 // Preveri ali je uporabnik tehnik
 function isTechnician() {
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'technician';
+    return isset($_SESSION['role']) && ($_SESSION['role'] === 'technician' || $_SESSION['role'] === 'admin');
 }
 
 // Preusmeri če ni prijavljen
@@ -31,6 +31,15 @@ function requireLogin() {
 function requireAdmin() {
     requireLogin();
     if (!isAdmin()) {
+        header("location: dashboard.php");
+        exit;
+    }
+}
+
+// Preusmeri če ni tehnik
+function requireTechnician() {
+    requireLogin();
+    if (!isTechnician()) {
         header("location: dashboard.php");
         exit;
     }
