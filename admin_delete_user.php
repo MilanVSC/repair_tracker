@@ -1,6 +1,6 @@
 <?php
-include 'includes/config.php';
-include 'includes/auth.php';
+include_once 'includes/config.php';
+include_once 'includes/auth.php';
 requireAdmin();
 
 if (!isset($_GET["id"]) || empty(trim($_GET["id"]))) {
@@ -18,7 +18,9 @@ if ($user_id == $_SESSION["user_id"]) {
 
 // Preveri, če ima uporabnik povezana popravila
 $sql = "SELECT id FROM repairs WHERE reported_by = ? OR assigned_to = ?";
-if ($stmt = $conn->prepare($sql)) {
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
     $stmt->bind_param("ii", $user_id, $user_id);
     $stmt->execute();
     $stmt->store_result();
@@ -32,7 +34,9 @@ if ($stmt = $conn->prepare($sql)) {
 
 // Brisanje uporabnika
 $sql = "DELETE FROM users WHERE id = ?";
-if ($stmt = $conn->prepare($sql)) {
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
     $stmt->bind_param("i", $user_id);
     if ($stmt->execute()) {
         header("location: admin_users.php?success=Uporabnik je bil uspešno izbrisan.");
@@ -40,6 +44,8 @@ if ($stmt = $conn->prepare($sql)) {
         header("location: admin_users.php?error=Napaka pri brisanju uporabnika.");
     }
     $stmt->close();
+} else {
+    header("location: admin_users.php?error=Napaka pri pripravi poizvedbe.");
 }
 $conn->close();
 ?>

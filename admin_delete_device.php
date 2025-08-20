@@ -1,6 +1,6 @@
 <?php
-include 'includes/config.php';
-include 'includes/auth.php';
+include_once 'includes/config.php';
+include_once 'includes/auth.php';
 requireAdmin();
 
 if (!isset($_GET["id"]) || empty(trim($_GET["id"]))) {
@@ -12,7 +12,9 @@ $device_id = trim($_GET["id"]);
 
 // Preveri, če ima naprava povezana popravila
 $sql = "SELECT id FROM repairs WHERE device_id = ?";
-if ($stmt = $conn->prepare($sql)) {
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
     $stmt->bind_param("i", $device_id);
     $stmt->execute();
     $stmt->store_result();
@@ -26,7 +28,9 @@ if ($stmt = $conn->prepare($sql)) {
 
 // Brisanje naprave
 $sql = "DELETE FROM devices WHERE id = ?";
-if ($stmt = $conn->prepare($sql)) {
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
     $stmt->bind_param("i", $device_id);
     if ($stmt->execute()) {
         header("location: admin_devices.php?success=Naprava je bila uspešno izbrisana.");
@@ -34,6 +38,8 @@ if ($stmt = $conn->prepare($sql)) {
         header("location: admin_devices.php?error=Napaka pri brisanju naprave.");
     }
     $stmt->close();
+} else {
+    header("location: admin_devices.php?error=Napaka pri pripravi poizvedbe.");
 }
 $conn->close();
 ?>
