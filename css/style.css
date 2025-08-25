@@ -424,3 +424,41 @@ span.error {
         padding: 1rem;
     }
 }
+.comment-count {
+    display: inline-block;
+    background: #17a2b8;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.comment-count:hover {
+    background: #138496;
+    transform: scale(1.1);
+}
+
+.comment-count[data-count='0'] {
+    background: #6c757d;
+    opacity: 0.6;
+}
+
+/* Opcijsko: dodaj ikono komentarja */
+.comment-count.with-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 8px;
+    border-radius: 12px;
+    width: auto;
+}
+
+.comment-count.with-icon::before {
+    content: '💬';
+    font-size: 0.9rem;
+}
